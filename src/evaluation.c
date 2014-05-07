@@ -18,6 +18,17 @@
  *    along with this Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ *
+ *
+ *
+ *
+ * /!\ Les tests supplémentaires se trouvent à la fin du fichier /!\
+ *
+ *
+ *
+ *
+ */
 
 #include "automate.h"
 #include "outils.h"
@@ -211,6 +222,7 @@ int test_creer_automate(){
 		, result
 	);
 
+    //print_automate( automate );
 
 	liberer_automate( automate );
 
@@ -522,6 +534,53 @@ int test_automate_vide(){
 
 }
 
+/*
+ * Début des tests non fournis
+ */
+
+int test_mot_to_automate(){
+    BEGIN_TEST;
+    
+    int result = 1;
+    
+    Automate *automate = mot_to_automate("");
+    
+    TEST(
+        ! est_un_etat_de_l_automate(automate, 0)
+        , result
+    );
+    
+    Automate *automate2 = mot_to_automate("a");
+    
+    TEST(
+        est_un_etat_initial_de_l_automate(automate2, 0)
+        &&  est_un_etat_final_de_l_automate(automate2, 1)
+        , result
+    );
+    
+    Automate *automate3 = mot_to_automate("aaab");
+    
+    TEST(
+        est_un_etat_initial_de_l_automate(automate3, 0)
+        && est_un_etat_final_de_l_automate(automate3, 4)
+        && est_une_transition_de_l_automate(automate3, 3, 'b', 4)
+        , result
+    );
+    
+    //print_automate(automate3);
+    
+    liberer_automate(automate);
+    liberer_automate(automate2);
+    liberer_automate(automate3);
+    
+    return result;
+}
+
+/*
+ * Fin des tests non fournis
+ */
+
+
 int main(){
 	nb_test = 0;
 	nb_total_test = 0;
@@ -533,6 +592,12 @@ int main(){
 	ajouter_test( test_mot_accepte );
 	ajouter_test( test_automate_vide );
 
+    // tests persos
+    
+    ajouter_test( test_mot_to_automate );
+    
+    // fin tests persos
+    
 	set_all_sigactions();
 	
 	start_or_continue_test();

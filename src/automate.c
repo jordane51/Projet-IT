@@ -230,6 +230,7 @@ Ensemble * delta_star(
     }
     if(DEBUG_AUTOMATE){
         print_ensemble(etat_etats, NULL);
+        printf("\n");
     }
     return etat_etats;
 }
@@ -379,7 +380,30 @@ int get_min_etat( const Automate* automate ){
 }
 
 Automate * mot_to_automate( const char * mot ){
-	A_FAIRE_RETURN(NULL);
+	//A_FAIRE_RETURN(NULL);
+    /* On itère les lettres l1...ln du mot passé en paramètre, et à chaque lettre on crée un état li, et on crée une transition li-1 -> li.
+     La première lettre lue sera l'état initial, la dernière l'état final.*/
+    Automate *resultat = creer_automate();
+    int i;
+    int length = strlen(mot);
+    
+    // on se débarasse du cas mot vide
+    if(length == 0){
+        return creer_automate();
+    }
+    
+    for(i = 0; i <= length; i++){
+        if(i == 0){
+            ajouter_etat_initial(resultat, i);
+        } else if(i == length){
+            ajouter_etat_final(resultat, i);
+            ajouter_transition(resultat, i-1,mot[i-1], i);
+        } else {
+            ajouter_etat(resultat, i);
+            ajouter_transition(resultat, i-1,mot[i-1], i);
+        }
+    }
+    return resultat;
 }
 
 
