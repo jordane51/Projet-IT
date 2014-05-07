@@ -17,6 +17,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this Library.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define DEBUG_AUTOMATE 1
 
 #include "automate.h"
 #include "table.h"
@@ -221,9 +222,16 @@ Ensemble * delta_star(
 	const Automate* automate, const Ensemble * etats_courants, const char* mot
 ){
 	//A_FAIRE_RETURN( creer_ensemble(NULL,NULL,NULL) );
-    /* on itère sur le mot et on conserve à chaque itération les états atteints, on retourne ensuite l'ensemble des états atteints à la fin de l'itération sur le mot. */
-    Ensemble *etat_etats
-    
+    /* on itère sur les lettres du mot et on conserve à chaque itération les états atteints, on retourne ensuite l'ensemble des états atteints à la fin de l'itération sur le mot. */
+    Ensemble *etat_etats = copier_ensemble(etats_courants);
+    int i;
+    for(i = 0; i < strlen(mot); i++){
+        etat_etats = delta(automate, etat_etats, mot[i]);
+    }
+    if(DEBUG_AUTOMATE){
+        print_ensemble(etat_etats, NULL);
+    }
+    return etat_etats;
 }
 
 void pour_toute_transition(
@@ -444,15 +452,19 @@ int est_un_etat_de_l_automate( const Automate* automate, int etat ){
 }
 
 int est_un_etat_initial_de_l_automate( const Automate* automate, int etat ){
-	A_FAIRE_RETURN(0);
+	//A_FAIRE_RETURN(0);
+    return est_dans_l_ensemble( get_initiaux( automate
+                                             ), etat);
 }
 
 int est_un_etat_final_de_l_automate( const Automate* automate, int etat ){
-	A_FAIRE_RETURN(0);
+	//A_FAIRE_RETURN(0);
+    return est_dans_l_ensemble( get_finaux( automate ), etat);
 }
 
 int est_une_lettre_de_l_automate( const Automate* automate, char lettre ){
-	A_FAIRE_RETURN(0);
+	//A_FAIRE_RETURN(0);
+    return est_dans_l_ensemble( get_alphabet( automate ), lettre);
 }
 
 void print_ensemble_2( const intptr_t ens ){
