@@ -114,15 +114,18 @@ const Ensemble * get_etats( const Automate* automate ){
 }
 
 const Ensemble * get_initiaux( const Automate* automate ){
-	A_FAIRE_RETURN(NULL);
+	//A_FAIRE_RETURN(NULL);
+    return automate->initiaux;
 }
 
 const Ensemble * get_finaux( const Automate* automate ){
-	A_FAIRE_RETURN(NULL);
+	//A_FAIRE_RETURN(NULL);
+    return automate->finaux;
 }
 
 const Ensemble * get_alphabet( const Automate* automate ){
-	A_FAIRE_RETURN(NULL);
+	//A_FAIRE_RETURN(NULL);
+    return automate->alphabet;
 }
 
 void ajouter_etat( Automate * automate, int etat ){
@@ -130,7 +133,7 @@ void ajouter_etat( Automate * automate, int etat ){
 }
 
 void ajouter_lettre( Automate * automate, char lettre ){
-	A_FAIRE;
+	ajouter_element( automate ->alphabet, lettre );
 }
 
 void ajouter_transition(
@@ -156,13 +159,23 @@ void ajouter_transition(
 void ajouter_etat_final(
 	Automate * automate, int etat_final
 ){
-	A_FAIRE;
+    //A_FAIRE
+    /* Si l'état n'existe pas, on l'ajoute, puis dans tous les cas on le passe en etat final */
+	if(!est_un_etat_de_l_automate( automate, etat_final)){
+        ajouter_etat( automate, etat_final );
+    }
+    ajouter_element( automate->finaux, etat_final );
 }
 
 void ajouter_etat_initial(
 	Automate * automate, int etat_initial
 ){
-	A_FAIRE;
+	//A_FAIRE;
+    /* Si l'état n'existe pas, on l'ajoute, puis dans tous les cas on le passe en etat initial */
+    if(!est_un_etat_de_l_automate( automate, etat_initial)){
+        ajouter_etat( automate, etat_initial );
+    }
+    ajouter_element( automate->initiaux, etat_initial );
 }
 
 const Ensemble * voisins( const Automate* automate, int origine, char lettre ){
@@ -207,7 +220,10 @@ Ensemble * delta(
 Ensemble * delta_star(
 	const Automate* automate, const Ensemble * etats_courants, const char* mot
 ){
-	A_FAIRE_RETURN( creer_ensemble(NULL,NULL,NULL) );
+	//A_FAIRE_RETURN( creer_ensemble(NULL,NULL,NULL) );
+    /* on itère sur le mot et on conserve à chaque itération les états atteints, on retourne ensuite l'ensemble des états atteints à la fin de l'itération sur le mot. */
+    Ensemble *etat_etats
+    
 }
 
 void pour_toute_transition(
