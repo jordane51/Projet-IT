@@ -422,8 +422,28 @@ Automate *automate_accessible( const Automate * automate){
 	A_FAIRE_RETURN(NULL);
 }
 
+void ajouter_transition_inverse( int origine, char lettre, int fin, void* data ){
+    Automate *newAutomate = (Automate *)data;
+    ajouter_transition(newAutomate, fin, lettre, origine);
+    //Cle newCle;
+    //initialiser_cle(&newCle, fin, lettre);
+    //print_cle(&newCle);
+    //add_table(newAutomate->transitions, (intptr_t)&newCle, (intptr_t)origine);
+   // supprimer_cle(newCle);
+    
+}
+
 Automate *miroir( const Automate * automate){
-	A_FAIRE_RETURN(NULL);
+	//A_FAIRE_RETURN(NULL);
+    /* On inverse les états finaux et les états initiaux, puis pour chaque transition on inverse les états tel que A->B devienne B->A à l'aide de la fonction inverser_transition ci-dessus */
+    //Automate *resultat = copier_automate(automate);
+    //swap_ensemble(resultat->initiaux, resultat->finaux);
+    //pour_toute_transition(resultat, inverser_transition, resultat);
+    Automate *resultat = creer_automate();
+    resultat->initiaux = copier_ensemble(automate->finaux);
+    resultat->finaux = copier_ensemble(automate->initiaux);
+    pour_toute_transition(automate, ajouter_transition_inverse, resultat);
+    return resultat;
 }
 
 Automate *automate_co_accessible( const Automate * automate){

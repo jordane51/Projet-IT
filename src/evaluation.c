@@ -29,7 +29,6 @@
  *
  *
  */
-
 #include "automate.h"
 #include "outils.h"
 #include "fifo.h"
@@ -576,6 +575,34 @@ int test_mot_to_automate(){
     return result;
 }
 
+int test_miroir(){
+    BEGIN_TEST;
+    
+    int result = 1;
+    
+    Automate *automate = mot_to_automate("aab");
+    Automate *automateMiroir = miroir(automate);
+    
+   TEST(
+         est_un_etat_final_de_l_automate(automateMiroir, 0)
+         && est_un_etat_initial_de_l_automate(automateMiroir, 3)
+         && est_une_transition_de_l_automate(automateMiroir, 3, 'b', 2)
+         && est_une_transition_de_l_automate(automateMiroir, 2, 'a', 1)
+         && est_une_transition_de_l_automate(automateMiroir, 1, 'a', 0)
+         , result
+    );
+    
+    //print_automate(automate);
+    //printf("\n\n\n");
+    //print_automate(automateMiroir);
+    
+    liberer_automate(automate);
+    liberer_automate(automateMiroir);
+    
+    return result;
+}
+
+
 /*
  * Fin des tests non fournis
  */
@@ -588,6 +615,7 @@ int main(){
 
 	ajouter_test( test_execute_fonctions );
 	ajouter_test( test_delta_delta_star );
+    ajouter_test( test_miroir );
 	ajouter_test( test_creer_automate );
 	ajouter_test( test_mot_accepte );
 	ajouter_test( test_automate_vide );
