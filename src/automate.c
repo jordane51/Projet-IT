@@ -413,32 +413,45 @@ Automate * creer_automate_des_sur_mots(
 	A_FAIRE_RETURN(NULL);
 }
 
+/* Renvoie l'ensemble des états accessibles depuis l'ensemble d'origine, quelque soit la lettre lue. L'algorithme est appelé recursivement sur les sous-ensembles d'états accessibles */
+Ensemble* delta_A(const Automate *automate, Ensemble *origine){
+    Ensemble *resultat = copier_ensemble(automate->initiaux);
+    vider_ensemble(resultat);
+    Ensemble_iterateur it = premier_iterateur_ensemble(automate->alphabet);
+    while(!iterateur_ensemble_est_vide(it)){
+        it = iterateur_suivant_ensemble(it);
+        char lettre = (char)get_element(it);
+        Ensemble *deltaCourant = delta(automate, origine, lettre);
+        resultat = creer_union_ensemble(deltaCourant, delta_A(automate, deltaCourant));
+        liberer_ensemble(deltaCourant);
+    }
+    return resultat;
+    
+}
 
 Ensemble* etats_accessibles( const Automate * automate, int etat ){
-	A_FAIRE_RETURN(NULL);
+    Ensemble *depart = creer_ensemble(NULL, NULL, NULL);
+    ajouter_element(depart, etat);
+    return delta_A(automate, depart);
 }
 
 Automate *automate_accessible( const Automate * automate){
-	A_FAIRE_RETURN(NULL);
+    Ensemble *depart = copier_ensemble(automate->initiaux);
+    Automate *resultat = copier_automate(automate);
+    deplacer_ensemble(resultat->etats, creer_intersection_ensemble(resultat->etats, delta_A( resultat, depart)));
+    liberer_ensemble(depart);
+    return resultat;
 }
 
 void ajouter_transition_inverse( int origine, char lettre, int fin, void* data ){
     Automate *newAutomate = (Automate *)data;
     ajouter_transition(newAutomate, fin, lettre, origine);
-    //Cle newCle;
-    //initialiser_cle(&newCle, fin, lettre);
-    //print_cle(&newCle);
-    //add_table(newAutomate->transitions, (intptr_t)&newCle, (intptr_t)origine);
-   // supprimer_cle(newCle);
     
 }
 
 Automate *miroir( const Automate * automate){
 	//A_FAIRE_RETURN(NULL);
-    /* On inverse les états finaux et les états initiaux, puis pour chaque transition on inverse les états tel que A->B devienne B->A à l'aide de la fonction inverser_transition ci-dessus */
-    //Automate *resultat = copier_automate(automate);
-    //swap_ensemble(resultat->initiaux, resultat->finaux);
-    //pour_toute_transition(resultat, inverser_transition, resultat);
+    /* On inverse les états finaux et les états initiaux, puis pour chaque transition on inverse les états tel que A->B devienne B->A à l'aide de la fonction ci-dessus */
     Automate *resultat = creer_automate();
     resultat->initiaux = copier_ensemble(automate->finaux);
     resultat->finaux = copier_ensemble(automate->initiaux);
@@ -496,18 +509,15 @@ int est_un_etat_de_l_automate( const Automate* automate, int etat ){
 }
 
 int est_un_etat_initial_de_l_automate( const Automate* automate, int etat ){
-	//A_FAIRE_RETURN(0);
     return est_dans_l_ensemble( get_initiaux( automate
                                              ), etat);
 }
 
 int est_un_etat_final_de_l_automate( const Automate* automate, int etat ){
-	//A_FAIRE_RETURN(0);
     return est_dans_l_ensemble( get_finaux( automate ), etat);
 }
 
 int est_une_lettre_de_l_automate( const Automate* automate, char lettre ){
-	//A_FAIRE_RETURN(0);
     return est_dans_l_ensemble( get_alphabet( automate ), lettre);
 }
 
