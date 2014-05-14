@@ -484,6 +484,7 @@ Automate * creer_automate_des_sur_mot(
 Automate * creer_automate_de_concatenation(
 	const Automate* automate1, const Automate* automate2
 ){
+    /* On supprime les états finaux d'automate 1 et on remplace les transitions vers les états finaux par des transitions vers un état initial unique d'automate 2 */
 	A_FAIRE_RETURN(NULL);
 }
 
@@ -549,5 +550,11 @@ void print_automate( const Automate * automate ){
 }
 
 int le_mot_est_reconnu( const Automate* automate, const char* mot ){
-	A_FAIRE_RETURN(0);
+    /* On lance delta_star depuis les états initiaux sur le mot passé en paramètre. Si l'ensemble renvoyé contient un état final, c'est que le mot a pu être lu. Sinon, c'est que le mot n'est pas reconnu */
+    int resultat = 1;
+    Ensemble *etatsAtteints = delta_star(automate, automate->initiaux, mot);
+    if(taille_ensemble(creer_intersection_ensemble(automate->finaux, etatsAtteints)) == 0){
+        resultat = 0;
+    }
+    return resultat;
 }
