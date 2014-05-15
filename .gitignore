@@ -24,3 +24,13 @@
 
 # System files
 *.DS_FILE
+
+*.tgz
+
+src/CHAHARANIADBOUSSALAMI-KHACHABI-BARRET/automate.c
+
+src/CHAHARANIADBOUSSALAMI-KHACHABI-BARRET/evaluation.c
+
+src/test_table
+
+src/evaluation

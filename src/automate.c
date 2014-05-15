@@ -478,7 +478,18 @@ Automate * creer_automate_des_facteurs( const Automate* automate ){
 Automate * creer_automate_des_sur_mot(
 	const Automate* automate, Ensemble * alphabet
 ){
-	A_FAIRE_RETURN(NULL);
+    /*
+	//creer un nouvelle automate vide
+	Automate *nvlleAutomate = creer_automate();
+	//on récupére l'alphabet de cette automate
+	const Ensemble *alphabet_automate=get_alphabet(automate);
+	//si l'alphabet appartient à l'ensemble
+	if(est_dans_l_ensemble(alphabet_automate,alphabet)){
+		//on ajoute l'élément
+    }
+    return nvlleAutomate;
+     */
+    A_FAIRE_RETURN(NULL);
 }
 
 Automate * creer_automate_de_concatenation(
